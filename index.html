@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiny Dream - Boutique Maquillage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #ff4d8b;
+            --secondary: #ff8fab;
+            --light: #ffd6e7;
+            --white: #ffffff;
+            --dark: #333;
+            --gray: #f5f5f5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--gray);
+            color: var(--dark);
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid white;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            opacity: 0.8;
+        }
+        
+        .cart-icon {
+            position: relative;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: white;
+            color: var(--primary);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .search-bar {
+            margin: 1rem 2rem;
+            position: relative;
+        }
+        
+        .search-bar input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 30px;
+            border: 2px solid var(--light);
+            font-size: 1rem;
+            padding-left: 40px;
+            transition: all 0.3s ease;
+        }
+        
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(255, 77, 139, 0.2);
+        }
+        
+        .search-bar i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .hero {
+            height: 400px;
+            background-image: url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .products-section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .product-img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-category {
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .btn-details {
+            background: var(--light);
+            color: var(--primary);
+        }
+        
+        .btn-details:hover {
+            background: #ffe6f0;
+        }
+        
+        .add-product-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+        
+        .add-product-form h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+        
+        .footer-column p, .footer-column a {
+            color: #aaa;
+            margin-bottom: 0.8rem;
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            color: #777;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            .logo-container {
+                margin-bottom: 1rem;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+            
+            nav ul li {
+                margin-left: 1rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+        }
+        .by{ color: #831934;
+        position:relative ;
+        left: 50px;
+        font-family:monospace;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="./image.png" alt="Logo Shiny Dream" class="logo-img">
+            <div class="logo-text">
+                <h1>Shiny Dream</h1>
+                <p class="by">By <h5>IHSSANE & AHLAM</h5></p>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" id="home-link">Accueil</a></li>
+                <li><a href="#" id="products-link">Produits</a></li>
+                <li><a href="#" id="add-product-link">Ajouter Produit</a></li>
+                <li>
+                    <div class="cart-icon" id="cart-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" id="search-input" placeholder="Rechercher des produits...">
+    </div>
+    
+    <section class="hero" id="hero-section">
+        <div class="hero-content">
+            <h2>Découvrez notre collection exclusive</h2>
+            <p>Des produits de maquillage de qualité professionnelle pour sublimer votre beauté naturelle</p>
+            <a href="#" class="btn" id="view-products-btn">Voir la collection</a>
+        </div>
+    </section>
+    
+    <section class="products-section" id="products-section">
+        <div class="section-title">
+            <h2>Nos Produits Phares</h2>
+            <p>Découvrez notre sélection de produits incontournables pour un maquillage parfait</p>
+        </div>
+        
+        <div class="products-grid" id="products-grid">
+            <!-- Les produits seront générés dynamiquement ici -->
+        </div>
+    </section>
+    
+    <section class="add-product-form hidden" id="add-product-section">
+        <h3>Ajouter un Nouveau Produit</h3>
+        <form id="product-form">
+            <div class="form-group">
+                <label for="product-name">Nom du Produit</label>
+                <input type="text" id="product-name" required>
+            </div>
+            <div class="form-group">
+                <label for="product-category">Catégorie</label>
+                <select id="product-category" required>
+                    <option value="">Sélectionner une catégorie</option>
+                    <option value="Rouge à lèvres">Rouge à lèvres</option>
+                    <option value="Fond de teint">Fond de teint</option>
+                    <option value="Mascara">Mascara</option>
+                    <option value="Palette">Palette</option>
+                    <option value="Fard à paupières">Fard à paupières</option>
+                    <option value="Produits de soin">Produits de soin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="product-price">Prix (DH)</label>
+                <input type="number" id="product-price" min="0" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="product-image">Image URL</label>
+                <input type="text" id="product-image" required>
+            </div>
+            <div class="form-group">
+                <label for="product-description">Description</label>
+                <textarea id="product-description" required></textarea>
+            </div>
+            <button type="submit" class="btn">Ajouter le Produit</button>
+        </form>
+    </section>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Shiny Dream</h3>
+                <p>Votre boutique de maquillage préférée à Rabat. Des produits de qualité pour sublimer votre beauté.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Contact</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Rabat - Ain Aouda</p>
+                <p><i class="fas fa-phone"></i> 0605434567</p>
+                <p><i class="fas fa-envelope"></i> contact@shinydream.ma</p>
+            </div>
+            
+            <div class="footer-column">
+                <h3>Horaires</h3>
+                <p>Lundi - Vendredi: 9h - 20h</p>
+                <p>Samedi: 10h - 19h</p>
+                <p>Dimanche: Fermé</p>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2025 Shiny Dream - IHSSANE & AHLAM. Tous droits réservés.</p>
+        </div>
+    </footer>
+    
+    <!-- partie de JavaScript -->
+
+    <script>
+      // Données des produits
+        let products = [
+            {
+                id: 1,
+                name: "Rouge Mat Longue Tenue",
+                category: "Rouge à lèvres",
+                price: 89,
+                image: "rouge_levres.jpeg",
+                description: "Formule ultra-pigmentée pour un effet mat velouté qui dure jusqu'à 12 heures sans transfert."
+            },
+            {
+                id: 2,
+                name: "Fluide Lumière Naturelle",
+                category: "Fond de teint",
+                price: 149,
+                image: "Fond_teint.jpg",
+                description: "Texture légère qui unifie le teint tout en laissant respirer la peau. Résultat naturel et lumineux."
+            },
+            {
+                id: 3,
+                name: "Volume Extrême",
+                category: "Mascara",
+                price: 129,
+                image: "Mascara.jpeg",
+                description: "Donne un volume intense et un allongement spectaculaire aux cils sans effet paquet."
+            },
+            {
+                id: 4,
+                name: "Nuances Nudes",
+                category: "Palette",
+                price: 199,
+                image: "palette3.jpeg",
+                description: "12 teintes mattes et satinées pour des looks naturels ou smokys. Pigmentation intense."
+            }
+        ];
+
+        // Panier
+        let cartItems = [];
+        const cartCount = document.querySelector('.cart-count');
+        const productsGrid = document.getElementById('products-grid');
+        const searchInput = document.getElementById('search-input');
+        
+        // Afficher les produits
+        function displayProducts(productsToDisplay) {
+            productsGrid.innerHTML = '';
+            
+            productsToDisplay.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="product-img">
+                    <div class="product-info">
+                        <span class="product-category">${product.category}</span>
+                        <h3 class="product-title">${product.name}</h3>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-price">${product.price} DH</div>
+                        <div class="product-actions">
+                            <button class="btn" data-id="${product.id}">Ajouter au panier</button>
+                            <button class="btn btn-details" data-id="${product.id}">Détails</button>
+                        </div>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+            
+            // Ajouter les événements aux boutons
+            document.querySelectorAll('.product-actions .btn:first-child').forEach(button => {
+                button.addEventListener('click', function() {
+                    addToCart(parseInt(this.getAttribute('data-id')));
+                });
+            });
+            
+            document.querySelectorAll('.btn-details').forEach(button => {
+                button.addEventListener('click', function() {
+                    showProductDetails(parseInt(this.getAttribute('data-id')));
+                });
+            });
+        }
+        
+        // Ajouter au panier
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                cartItems.push(product);
+                updateCartCount();
+                
+                // Animation feedback
+                const button = document.querySelector(`.btn[data-id="${productId}"]`);
+                button.textContent = 'Ajouté !';
+                button.style.backgroundColor = '#4CAF50';
+                
+                setTimeout(() => {
+                    button.textContent = 'Ajouter au panier';
+                    button.style.backgroundColor = '';
+                }, 1000);
+            }
+        }
+        
+        // Mettre à jour le compteur du panier
+        function updateCartCount() {
+            cartCount.textContent = cartItems.length;
+        }
+        
+        // Afficher les détails du produit
+        function showProductDetails(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                alert(`Détails du produit:\n\n${product.name}\n\nCatégorie: ${product.category}\n\nPrix: ${product.price} DH\n\nDescription: ${product.description}`);
+            }
+        }
+        
+        // Recherche de produits
+        function searchProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredProducts = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm) || 
+                product.category.toLowerCase().includes(searchTerm) ||
+                product.description.toLowerCase().includes(searchTerm)
+            );
+            displayProducts(filteredProducts);
+        }
+        
+        // Ajouter un nouveau produit
+        function addNewProduct(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('product-name').value;
+            const category = document.getElementById('product-category').value;
+            const price = parseFloat(document.getElementById('product-price').value);
+            const image = document.getElementById('product-image').value;
+            const description = document.getElementById('product-description').value;
+            
+            const newProduct = {
+                id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
+                name,
+                category,
+                price,
+                image,
+                description
+            };
+            
+            products.push(newProduct);
+            displayProducts(products);
+            
+            // Réinitialiser le formulaire
+            document.getElementById('product-form').reset();
+            
+            // Afficher un message de succès
+            alert('Produit ajouté avec succès!');
+            
+            // Revenir à la section des produits
+            showSection('products-section');
+        }
+        
+        // Afficher/masquer les sections
+        function showSection(sectionId) {
+            document.getElementById('hero-section').classList.add('hidden');
+            document.getElementById('products-section').classList.add('hidden');
+            document.getElementById('add-product-section').classList.add('hidden');
+            
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+        
+        // Événements
+        document.getElementById('search-input').addEventListener('input', searchProducts);
+        document.getElementById('product-form').addEventListener('submit', addNewProduct);
+        
+        document.getElementById('home-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('hero-section').classList.remove('hidden');
+            document.getElementById('products-section').classList.add('hidden');
+            document.getElementById('add-product-section').classList.add('hidden');
+        });
+        
+        document.getElementById('products-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            showSection('products-section');
+        });
+        
+        document.getElementById('add-product-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            showSection('add-product-section');
+        });
+        
+        document.getElementById('view-products-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            showSection('products-section');
+        });
+        
+        document.getElementById('cart-icon').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (cartItems.length === 0) {
+                alert('Votre panier est vide!');
+            } else {
+                let cartContent = 'Votre panier:\n\n';
+                let total = 0;
+                
+                cartItems.forEach((item, index) => {
+                    cartContent += `${index + 1}. ${item.name} - ${item.price} DH\n`;
+                    total += item.price;
+                });
+                
+                cartContent += `\nTotal: ${total} DH`;
+                
+                alert(cartContent);
+            }
+        });
+        
+        // Initialisation
+        displayProducts(products);
+    </script>
+</body>
+</html>
